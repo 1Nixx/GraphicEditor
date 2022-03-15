@@ -1,0 +1,31 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:Lab4"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="Lab4.MainWindow"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="OOP" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <materialDesign:Card Background="Coral">
+            <Grid>
+                <ComboBox x:Name="cbTool" Width="130" Height="25" HorizontalAlignment="Left" Margin="15" SelectionChanged="cbTool_SelectionChanged"/>
+                <Button x:Name="btnClear" Content="Clear field" Width="130" Height="25" Background="#3C988E" BorderBrush="#3C988E" HorizontalAlignment="Left" Margin="160 0 0 0" Click="btnClear_Click"/>
+                <Slider x:Name="slWidth" Width="120" Value="5" VerticalAlignment="Center" Margin="306,0,374,0" Minimum="1" Maximum="50" ValueChanged="slWidth_ValueChanged"/>
+                <Label x:Name="lbSize2" Content="5px" VerticalAlignment="Top" Margin="344,-2,396,0"/>
+
+                <syncfusion:ColorPicker x:Name="clrFill" Brush="Chocolate" HorizontalAlignment="Left" Margin="477,0,0,0" VerticalAlignment="Center" Width="120" ColorChanged="clrFill_ColorChanged"/>
+                <syncfusion:ColorPicker x:Name="clrBorder" Brush="Blue" HorizontalAlignment="Left" Margin="630,0,0,0" VerticalAlignment="Center" Width="120" ColorChanged="clrBorder_ColorChanged"/>
+
+
+            </Grid>
+        </materialDesign:Card>
+        <Canvas x:Name="cnvPaint" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" MouseLeftButtonDown="cnvPaint_MouseLeftButtonDown" MouseLeftButtonUp="cnvPaint_MouseLeftButtonUp" MouseMove="cnvPaint_MouseMove"/>
+    </Grid>
+</Window>
