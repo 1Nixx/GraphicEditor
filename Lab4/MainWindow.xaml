@@ -7,22 +7,24 @@
         xmlns:local="clr-namespace:Lab4"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="Lab4.MainWindow"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="OOP" Height="450" Width="800">
+        Title="OOP" Height="450" Width="1000">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <materialDesign:Card Background="Coral">
             <Grid>
-                <ComboBox x:Name="cbTool" Width="130" Height="25" HorizontalAlignment="Left" Margin="15" SelectionChanged="cbTool_SelectionChanged"/>
-                <Button x:Name="btnClear" Content="Clear field" Width="130" Height="25" Background="#3C988E" BorderBrush="#3C988E" HorizontalAlignment="Left" Margin="160 0 0 0" Click="btnClear_Click"/>
-                <Slider x:Name="slWidth" Width="120" Value="5" VerticalAlignment="Center" Margin="306,0,374,0" Minimum="1" Maximum="50" ValueChanged="slWidth_ValueChanged"/>
-                <Label x:Name="lbSize2" Content="5px" VerticalAlignment="Top" Margin="344,-2,396,0"/>
+                <ComboBox x:Name="cbTool" Width="130" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15" SelectionChanged="cbTool_SelectionChanged"/>
 
-                <syncfusion:ColorPicker x:Name="clrFill" Brush="Chocolate" HorizontalAlignment="Left" Margin="477,0,0,0" VerticalAlignment="Center" Width="120" ColorChanged="clrFill_ColorChanged"/>
-                <syncfusion:ColorPicker x:Name="clrBorder" Brush="Blue" HorizontalAlignment="Left" Margin="630,0,0,0" VerticalAlignment="Center" Width="120" ColorChanged="clrBorder_ColorChanged"/>
+                <Button x:Name="btnClear" Content="Clear field" Width="97" Height="25" Background="#3C988E" BorderBrush="#3C988E" HorizontalAlignment="Left" Margin="162,22,0,22" Click="btnClear_Click"/>
+                <Slider x:Name="slWidth" Width="120" Value="5" VerticalAlignment="Center" Margin="275,0,605,0" Minimum="1" Maximum="50" ValueChanged="slWidth_ValueChanged"/>
+                <Label x:Name="lbSize2" Content="5px" VerticalAlignment="Top" Margin="316,-1,621,0"/>
 
+                <syncfusion:ColorPicker x:Name="clrFill" Brush="Chocolate" HorizontalAlignment="Left" VerticalAlignment="Center" Width="120" ColorChanged="clrFill_ColorChanged" Margin="408,0,0,0"/>
+                <syncfusion:ColorPicker x:Name="clrBorder" Brush="Blue" HorizontalAlignment="Left" Margin="544,0,0,0" VerticalAlignment="Center" Width="120" ColorChanged="clrBorder_ColorChanged"/>
+                <Button x:Name="btnSaveField" Content="Save field" HorizontalAlignment="Left" Margin="681,6,0,0" VerticalAlignment="Top" Height="24" Width="100" Click="btnSaveField_Click"/>
+                <Button x:Name="btnOpenField" Content="Open field" HorizontalAlignment="Left" Margin="681,35,0,0" VerticalAlignment="Top" Height="24" Width="100" Click="btnOpenField_Click"/>
 
             </Grid>
         </materialDesign:Card>
