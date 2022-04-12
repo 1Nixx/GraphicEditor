@@ -17,6 +17,8 @@ namespace Core.Models
 
 		protected Shape _shape;
 
+		protected internal bool _isSelected { get; set; }
+
 		public abstract Shape BuildFigure();
 
 		protected virtual void ConfigureColors()
@@ -33,8 +35,21 @@ namespace Core.Models
 				_shape.Stroke = colorBorder;
 			else
 				_shape.Stroke = new SolidColorBrush(Color.FromRgb(0, 0, 0));
-
 			_shape.StrokeThickness = borderWidth.GetValueOrDefault(2);
+
+			if (_isSelected)
+			{
+				_shape.Stroke = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+				_shape.StrokeDashArray = new DoubleCollection { 4, 2 };
+				_shape.StrokeDashCap = PenLineCap.Round;
+				//_shape.StrokeThickness = 5;
+			}			
 		}
+
+		public int GetXStartPos() => (int)(MouseLeftDownPos.X > MouseLeftUpPos.X ? MouseLeftUpPos.X : MouseLeftDownPos.X);
+
+		public int GetYStartPos() => (int)(MouseLeftDownPos.Y > MouseLeftUpPos.Y ? MouseLeftUpPos.Y : MouseLeftDownPos.Y);
+
+
 	}
 }

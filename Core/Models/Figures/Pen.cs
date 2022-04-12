@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Core.Models
 {
-	internal class Pen : FigureBase
+	internal class Pen : FigureBase, ISelectable
 	{
 		public override Shape BuildFigure()
 		{
@@ -20,7 +21,28 @@ namespace Core.Models
 			else
 				shape.Fill = new SolidColorBrush(Color.FromRgb(0, 0, 0));
 
+			if (_isSelected)
+				shape.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+
+
 			return shape;
+		}
+
+		public bool IsSelected(Point pointPos)
+		{
+			if (pointPos.X >= MouseLeftDownPos.X && pointPos.Y >= MouseLeftDownPos.Y && pointPos.X <= MouseLeftDownPos.X + borderWidth && pointPos.Y <= MouseLeftDownPos.Y + borderWidth)
+				return true;
+			return false;
+		}
+
+		public void RemoveSelection()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetSelection()
+		{
+			_isSelected = true;
 		}
 	}
 }

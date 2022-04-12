@@ -28,6 +28,6 @@
 
             </Grid>
         </materialDesign:Card>
-        <Canvas x:Name="cnvPaint" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" MouseLeftButtonDown="cnvPaint_MouseLeftButtonDown" MouseLeftButtonUp="cnvPaint_MouseLeftButtonUp" MouseMove="cnvPaint_MouseMove"/>
+        <Canvas x:Name="cnvPaint" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" MouseLeftButtonDown="cnvPaint_MouseLeftButtonDown" MouseMove="cnvPaint_MouseMove"/>
     </Grid>
 </Window>

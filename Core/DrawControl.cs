@@ -35,6 +35,7 @@ namespace Core
 				.ForMember(x => x.colorBorder, s => s.MapFrom(fInf => new SolidColorBrush(fInf.colorBorder)))
 				.ForMember(x => x.colorFill, s => s.MapFrom(fInf => new SolidColorBrush(fInf.colorFill)))
 				.ForMember(x => x.borderWidth, s => s.MapFrom(x => x.borderWidth))
+				.ForMember(x => x._isSelected, s => s.MapFrom(fInf => false))
 			);
 
 			_mapper = new Mapper(config);
@@ -42,17 +43,71 @@ namespace Core
 
 		private static List<FigureInfo> figureList = new List<FigureInfo>();
 
-		public static void Draw(Canvas drawingField, FigureInfo figureInfo)
+		public static void Draw(Canvas drawingField, FigureInfo figureInfo, bool isNew)
 		{	
 			var shapeCreator = _mapper.Map<FigureBase>(figureInfo);
 
 			var figure = shapeCreator.BuildFigure();
 			SetFigurePos(shapeCreator.MouseLeftDownPos, shapeCreator.MouseLeftUpPos, figure);
 
+			if (!isNew && figureList.Count != 0)
+				figureList.RemoveAt(figureList.Count - 1);
+
 			figureList.Add(figureInfo);
 
-			drawingField.Children.Add(figure);
+			LoadShapesToCanvas(drawingField);
+			//drawingField.Children.Add(figure);
+
 		}
+
+		private static FigureInfo _selectedFigure { get; set; }
+
+		public static bool SelectFigure(Canvas drawingField, Point pressPos)
+		{
+			for (int i = figureList.Count - 1; i >= 0; i--)
+			{
+				var shapeCreator = _mapper.Map<FigureBase>(figureList[i]);
+				if (shapeCreator is ISelectable)
+				{
+					if ((shapeCreator as ISelectable).IsSelected(pressPos))
+					{
+						_selectedFigure = figureList[i];
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		public static void RemoveSelection(Canvas drawingField)
+		{
+			_selectedFigure = null;
+			LoadShapesToCanvas(drawingField);
+		}
+
+		#region Change selection figure
+
+		public static void ChangeColorFill(Color newColor)
+		{
+			_selectedFigure?.ChangeColorFill(newColor);
+		}
+
+		public static void ChangeColorBorder(Color newColor)
+		{
+			_selectedFigure?.ChangeColorBorder(newColor);
+		}
+
+		public static void ChangeBorderWidth(int newWidth)
+		{
+			_selectedFigure?.ChangeBorderWidth(newWidth);
+		}
+
+		public static void ChangeFigurePos(Point downPos, Point upPos)
+		{
+			
+		}
+
+		#endregion
 
 		private static void SetFigurePos(Point leftTopPos, Point rightBottomPos, Shape figure)
 		{
@@ -89,6 +144,9 @@ namespace Core
 			foreach (var figure in figureList)
 			{
 				var shapeCreator = _mapper.Map<FigureBase>(figure);
+				if (figure == _selectedFigure)
+					(shapeCreator as ISelectable).SetSelection();
+				
 				var buildFigure = shapeCreator.BuildFigure();
 				SetFigurePos(shapeCreator.MouseLeftDownPos, shapeCreator.MouseLeftUpPos, buildFigure);
 
@@ -99,6 +157,7 @@ namespace Core
 		public static void ClearPaintField(Canvas drawingField)
 		{
 			figureList.Clear();
+			_selectedFigure = null;
 			drawingField.Children.Clear();
 		}
 	}

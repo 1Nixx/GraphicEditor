@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace Core
 {
-	public class FigureInfo : ICloneable
+	public class FigureInfo : ICloneable, IEditable
 	{
 
 		public Point leftTopPos { get; set; }
@@ -62,6 +62,32 @@ namespace Core
 				var arr = BitConverter.GetBytes(value);
 				colorFill = Color.FromArgb(arr[0], arr[1], arr[2], arr[3]);
 			}
+		}
+
+		public void ChangeBorderWidth(int newWidth)
+		{
+			borderWidth = newWidth;
+		}
+
+		public void ChangeCenterPos(Point newPos)
+		{
+			leftTopPos = new Point { X = leftTopPos.X + newPos.X, Y = leftTopPos.Y + newPos.Y };
+			rightBottomPos = new Point { X = rightBottomPos.X + newPos.X, Y = rightBottomPos.Y + newPos.Y };
+		}
+
+		public void ChangeColorBorder(Color colorBorder)
+		{
+			this.colorBorder = colorBorder;
+		}
+
+		public void ChangeColorFill(Color colorFill)
+		{
+			this.colorFill = colorFill;
+		}
+
+		public void ChangeSizes(int width, int height)
+		{
+			rightBottomPos = new Point { X = leftTopPos.X + width, Y = leftTopPos.Y + height };
 		}
 
 		public object Clone()

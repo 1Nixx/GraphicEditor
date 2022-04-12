@@ -8,6 +8,7 @@ namespace Core
 {
 	public enum Tool
 	{
+        Pointer,
         Pen,
         Line,
         Rectangle,

@@ -26,7 +26,7 @@ namespace Lab4
 		{
 			InitializeComponent();
 
-			for (Tool toolType = Tool.Pen; toolType <= Tool.Circle; toolType++)
+			for (Tool toolType = Tool.Pointer; toolType <= Tool.Circle; toolType++)
 				cbTool.Items.Add(toolType.ToString());
 
 			cbTool.SelectedIndex = 0;
@@ -34,53 +34,87 @@ namespace Lab4
 
 		private void cnvPaint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			_isLeftDown = true;
-			_figureInfo.leftTopPos = Mouse.GetPosition(cnvPaint);
+			if (_figureInfo.toolType == Tool.Pointer)
+			{
+				_isSelected = DrawControl.SelectFigure(cnvPaint, Mouse.GetPosition(cnvPaint));
+				DrawControl.LoadShapesToCanvas(cnvPaint);
+			}
+			else
+			{
+				_isLeftDown = true;
+				_isPaintedNewFigure = true;
+				_firstPainted = false;
+				_figureInfo.leftTopPos = Mouse.GetPosition(cnvPaint);
+			}	
 		}
 
 		private void cnvPaint_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
+			if (_figureInfo.toolType == Tool.Pointer)
+				return;
+
 			if (_isLeftDown)
 			{
 				_figureInfo.rightBottomPos = Mouse.GetPosition(cnvPaint);
-				DrawFigure();
+				if (sender is bool)
+					DrawFigure((bool)sender);
+				else
+					DrawFigure(true);
+				
 				_isLeftDown = false;
 			}
 		}
 
-		private void cbTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			_figureInfo.toolType = GetToolByIndex(cbTool.SelectedIndex);
-		}
-
-		private void btnClear_Click(object sender, RoutedEventArgs e)
-		{
-			DrawControl.ClearPaintField(cnvPaint);
-		}
-
 		private void cnvPaint_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (!_isLeftDown)
+			if (_figureInfo.toolType == Tool.Pointer)
 				return;
+
+			if (!_isLeftDown || Mouse.LeftButton == MouseButtonState.Released)
+			{
+				if (_firstPainted)
+					cnvPaint_MouseLeftButtonUp(false, null);
+				else
+					cnvPaint_MouseLeftButtonUp(true, null);
+				return;
+			}
+				
 
 			if (_figureInfo.toolType == Tool.Pen)
 			{
 				_figureInfo.rightBottomPos = _figureInfo.leftTopPos = Mouse.GetPosition(cnvPaint);
-				DrawFigure();
+				DrawFigure(true);
+				_firstPainted = true;
 			}
-				
+			else
+			{
+				_figureInfo.rightBottomPos = Mouse.GetPosition(cnvPaint);
+				DrawFigure(_isPaintedNewFigure);
+				_firstPainted = true;
+				_isPaintedNewFigure = false;
+			}
 		}
 
+		private bool _isSelected { 
+			get => _isSelected;
+			set
+			{
+				if (value == false)
+					DrawControl.RemoveSelection(cnvPaint);
+			} }
+
 		private bool _isLeftDown = false;
+		private bool _firstPainted = false;
+		private bool _isPaintedNewFigure = true;
 		private FigureInfo _figureInfo = new FigureInfo();
 
-		private void DrawFigure()
+		private void DrawFigure(bool isNew)
 		{
-			DrawControl.Draw(cnvPaint, _figureInfo.Clone() as FigureInfo);
+			DrawControl.Draw(cnvPaint, _figureInfo.Clone() as FigureInfo, isNew);
 		}
 		private Tool GetToolByIndex(int index)
 		{
-			for (Tool toolType = Tool.Pen; toolType <= Tool.Circle; toolType++)
+			for (Tool toolType = Tool.Pointer; toolType <= Tool.Circle; toolType++)
 			{
 				if ((int)toolType == index)
 				{
@@ -88,6 +122,17 @@ namespace Lab4
 				}
 			}
 			return Tool.None;
+		}
+
+		private void cbTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			_figureInfo.toolType = GetToolByIndex(cbTool.SelectedIndex);
+			DrawControl.LoadShapesToCanvas(cnvPaint);
+		}
+
+		private void btnClear_Click(object sender, RoutedEventArgs e)
+		{
+			DrawControl.ClearPaintField(cnvPaint);
 		}
 
 		private void slWidth_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
