@@ -47,8 +47,8 @@ namespace Core
 		{	
 			var shapeCreator = _mapper.Map<FigureBase>(figureInfo);
 
-			var figure = shapeCreator.BuildFigure();
-			SetFigurePos(shapeCreator.MouseLeftDownPos, shapeCreator.MouseLeftUpPos, figure);
+			//var figure = shapeCreator.BuildFigure();
+			//SetFigurePos(shapeCreator.MouseLeftDownPos, shapeCreator.MouseLeftUpPos, figure);
 
 			if (!isNew && figureList.Count != 0)
 				figureList.RemoveAt(figureList.Count - 1);
@@ -107,7 +107,7 @@ namespace Core
 			_selectedFigure?.ChangeCenterPos(vector);
 		}
 
-		public static void ChandeSizes(int newWidth, int newHeight)
+		public static void ChangeSizes(int newWidth, int newHeight)
 		{
 			_selectedFigure?.ChangeSizes(newWidth, newHeight);
 		}

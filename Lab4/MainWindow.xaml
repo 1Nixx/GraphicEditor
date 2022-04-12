@@ -25,6 +25,8 @@
                 <syncfusion:ColorPicker x:Name="clrBorder" Brush="Blue" HorizontalAlignment="Left" Margin="544,0,0,0" VerticalAlignment="Center" Width="120" ColorChanged="clrBorder_ColorChanged"/>
                 <Button x:Name="btnSaveField" Content="Save field" HorizontalAlignment="Left" Margin="681,6,0,0" VerticalAlignment="Top" Height="24" Width="100" Click="btnSaveField_Click"/>
                 <Button x:Name="btnOpenField" Content="Open field" HorizontalAlignment="Left" Margin="681,35,0,0" VerticalAlignment="Top" Height="24" Width="100" Click="btnOpenField_Click"/>
+                <TextBox x:Name="tbWidth" materialDesign:HintAssist.Hint="Width" FontSize="13" VerticalAlignment="Top" Height="24" Margin="803,6,120,0" Visibility="Hidden" TextChanged="tbWidth_TextChanged"/>
+                <TextBox x:Name="tbHeight" materialDesign:HintAssist.Hint="Height" FontSize="13" VerticalAlignment="Top" Height="24" Margin="803,36,120,0" Visibility="Hidden" TextChanged="tbWidth_TextChanged"/>
             </Grid>
         </materialDesign:Card>
         <Canvas x:Name="cnvPaint" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" MouseLeftButtonDown="cnvPaint_MouseLeftButtonDown" MouseMove="cnvPaint_MouseMove"/>

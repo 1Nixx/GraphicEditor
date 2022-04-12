@@ -87,7 +87,9 @@ namespace Core
 
 		public void ChangeSizes(int width, int height)
 		{
-			rightBottomPos = new Point { X = leftTopPos.X + width, Y = leftTopPos.Y + height };
+			var leftTop = new Point { X = (leftTopPos.X > rightBottomPos.X ? rightBottomPos.X : leftTopPos.X), Y = leftTopPos.Y > rightBottomPos.Y ? rightBottomPos.Y : leftTopPos.Y };
+			leftTopPos = leftTop;
+			rightBottomPos = new Point { X = leftTop.X + width, Y = leftTop.Y + height };
 		}
 
 		public object Clone()

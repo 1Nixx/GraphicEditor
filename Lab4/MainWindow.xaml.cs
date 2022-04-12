@@ -24,8 +24,8 @@ namespace Lab4
 	{
 		public MainWindow()
 		{
-			_isSelected = false;
 			InitializeComponent();
+			_isSelected = false;
 
 			for (Tool toolType = Tool.Pointer; toolType <= Tool.Circle; toolType++)
 				cbTool.Items.Add(toolType.ToString());
@@ -125,7 +125,19 @@ namespace Lab4
 			{
 				selected = value;
 				if (value == false)
+				{
+					tbHeight.Visibility = Visibility.Hidden;
+					tbWidth.Visibility = Visibility.Hidden;
 					DrawControl.RemoveSelection();
+				}
+				else
+				{
+					tbHeight.Visibility = Visibility.Visible;
+					tbWidth.Visibility = Visibility.Visible;
+					(int width, int height) = DrawControl.GetFigureSizes();
+					tbWidth.Text = width.ToString();
+					tbHeight.Text = height.ToString();
+				}
 			} }
 		private Point _buttonDown;
 
@@ -155,6 +167,7 @@ namespace Lab4
 		{
 			_figureInfo.toolType = GetToolByIndex(cbTool.SelectedIndex);
 			DrawControl.RemoveSelection();
+			_isSelected = false;
 			DrawControl.LoadShapesToCanvas(cnvPaint);
 		}
 
@@ -218,5 +231,19 @@ namespace Lab4
 				DrawControl.LoadShapesToCanvas(cnvPaint);
 			}
 		}
+
+		private void tbWidth_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (_isSelected)
+			{
+				try
+				{
+					DrawControl.ChangeSizes(int.Parse(tbWidth.Text), int.Parse(tbHeight.Text));
+				}
+				catch { };
+				DrawControl.LoadShapesToCanvas(cnvPaint);
+			}
+		}
+
 	}
 }
