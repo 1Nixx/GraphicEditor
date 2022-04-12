@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Core.Models;
-
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -60,7 +60,7 @@ namespace Core
 
 		}
 
-		private static FigureInfo _selectedFigure { get; set; }
+		private static FigureInfo _selectedFigure;
 
 		public static bool SelectFigure(Canvas drawingField, Point pressPos)
 		{
@@ -79,10 +79,9 @@ namespace Core
 			return false;
 		}
 
-		public static void RemoveSelection(Canvas drawingField)
+		public static void RemoveSelection()
 		{
 			_selectedFigure = null;
-			LoadShapesToCanvas(drawingField);
 		}
 
 		#region Change selection figure
@@ -104,7 +103,18 @@ namespace Core
 
 		public static void ChangeFigurePos(Point downPos, Point upPos)
 		{
-			
+			var vector = new Point { X = upPos.X - downPos.X, Y = upPos.Y - downPos.Y };
+			_selectedFigure?.ChangeCenterPos(vector);
+		}
+
+		public static void ChandeSizes(int newWidth, int newHeight)
+		{
+			_selectedFigure?.ChangeSizes(newWidth, newHeight);
+		}
+		
+		public static (int width, int height) GetFigureSizes()
+		{
+			return ((int)Math.Abs(_selectedFigure.leftTopPos.X - _selectedFigure.rightBottomPos.X), (int)Math.Abs(_selectedFigure.leftTopPos.Y - _selectedFigure.rightBottomPos.Y));
 		}
 
 		#endregion

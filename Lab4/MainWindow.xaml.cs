@@ -24,11 +24,13 @@ namespace Lab4
 	{
 		public MainWindow()
 		{
+			_isSelected = false;
 			InitializeComponent();
 
 			for (Tool toolType = Tool.Pointer; toolType <= Tool.Circle; toolType++)
 				cbTool.Items.Add(toolType.ToString());
 
+			
 			cbTool.SelectedIndex = 0;
 		}
 
@@ -36,7 +38,9 @@ namespace Lab4
 		{
 			if (_figureInfo.toolType == Tool.Pointer)
 			{
-				_isSelected = DrawControl.SelectFigure(cnvPaint, Mouse.GetPosition(cnvPaint));
+				_buttonDown = Mouse.GetPosition(cnvPaint);
+				_isLeftDown = true;
+				_isSelected = DrawControl.SelectFigure(cnvPaint, _buttonDown);
 				DrawControl.LoadShapesToCanvas(cnvPaint);
 			}
 			else
@@ -68,40 +72,63 @@ namespace Lab4
 		private void cnvPaint_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (_figureInfo.toolType == Tool.Pointer)
-				return;
-
-			if (!_isLeftDown || Mouse.LeftButton == MouseButtonState.Released)
 			{
-				if (_firstPainted)
-					cnvPaint_MouseLeftButtonUp(false, null);
-				else
-					cnvPaint_MouseLeftButtonUp(true, null);
-				return;
-			}
-				
+				if (!_isLeftDown)
+					return;
+				else if (_isLeftDown && Mouse.LeftButton == MouseButtonState.Released)
+				{
+					_isLeftDown = false;
+					DrawControl.ChangeFigurePos(_buttonDown, Mouse.GetPosition(cnvPaint));
+					DrawControl.LoadShapesToCanvas(cnvPaint);
+					return;
+				}
 
-			if (_figureInfo.toolType == Tool.Pen)
-			{
-				_figureInfo.rightBottomPos = _figureInfo.leftTopPos = Mouse.GetPosition(cnvPaint);
-				DrawFigure(true);
-				_firstPainted = true;
+				var currPos = Mouse.GetPosition(cnvPaint);
+
+				DrawControl.ChangeFigurePos(_buttonDown, currPos);
+				_buttonDown = currPos;
+				DrawControl.LoadShapesToCanvas(cnvPaint);
 			}
 			else
 			{
-				_figureInfo.rightBottomPos = Mouse.GetPosition(cnvPaint);
-				DrawFigure(_isPaintedNewFigure);
-				_firstPainted = true;
-				_isPaintedNewFigure = false;
+				if (!_isLeftDown || Mouse.LeftButton == MouseButtonState.Released)
+				{
+					if (_firstPainted)
+						cnvPaint_MouseLeftButtonUp(false, null);
+					else
+						cnvPaint_MouseLeftButtonUp(true, null);
+					return;
+				}
+
+
+				if (_figureInfo.toolType == Tool.Pen)
+				{
+					_figureInfo.rightBottomPos = _figureInfo.leftTopPos = Mouse.GetPosition(cnvPaint);
+					DrawFigure(true);
+					_firstPainted = true;
+				}
+				else
+				{
+					_figureInfo.rightBottomPos = Mouse.GetPosition(cnvPaint);
+					DrawFigure(_isPaintedNewFigure);
+					_firstPainted = true;
+					_isPaintedNewFigure = false;
+				}
 			}
+			
 		}
 
+		private bool selected;
 		private bool _isSelected { 
-			get => _isSelected;
+			get => selected;
 			set
 			{
+				selected = value;
 				if (value == false)
-					DrawControl.RemoveSelection(cnvPaint);
+					DrawControl.RemoveSelection();
 			} }
+		private Point _buttonDown;
+
 
 		private bool _isLeftDown = false;
 		private bool _firstPainted = false;
@@ -127,6 +154,7 @@ namespace Lab4
 		private void cbTool_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			_figureInfo.toolType = GetToolByIndex(cbTool.SelectedIndex);
+			DrawControl.RemoveSelection();
 			DrawControl.LoadShapesToCanvas(cnvPaint);
 		}
 
@@ -137,19 +165,41 @@ namespace Lab4
 
 		private void slWidth_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			if (!(lbSize2 is null))
-				lbSize2.Content = ((int)e.NewValue).ToString() + "px";
-			_figureInfo.borderWidth = (int)e.NewValue;
+			if (!_isSelected)
+			{
+				if (!(lbSize2 is null))
+					lbSize2.Content = ((int)e.NewValue).ToString() + "px";
+				_figureInfo.borderWidth = (int)e.NewValue;
+			}
+			else
+			{
+				DrawControl.ChangeBorderWidth((int)e.NewValue);
+				DrawControl.LoadShapesToCanvas(cnvPaint);
+			}
 		}
 
 		private void clrFill_ColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			_figureInfo.colorFill =  clrFill.Color;
+			if (!_isSelected)
+				_figureInfo.colorFill =  clrFill.Color;
+			else
+			{
+				_figureInfo.colorFill = clrFill.Color;
+				DrawControl.ChangeColorFill(clrFill.Color);
+				DrawControl.LoadShapesToCanvas(cnvPaint);
+			}
 		}
 
 		private void clrBorder_ColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			_figureInfo.colorBorder = clrBorder.Color;
+			if (!_isSelected)
+				_figureInfo.colorBorder = clrBorder.Color;
+			else
+			{
+				_figureInfo.colorBorder = clrBorder.Color;
+				DrawControl.ChangeColorBorder(clrBorder.Color);
+				DrawControl.LoadShapesToCanvas(cnvPaint);
+			}
 		}
 
 		private void btnSaveField_Click(object sender, RoutedEventArgs e)
