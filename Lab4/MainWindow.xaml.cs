@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Lab4
+namespace GraphicEditor
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -128,12 +128,16 @@ namespace Lab4
 				{
 					tbHeight.Visibility = Visibility.Hidden;
 					tbWidth.Visibility = Visibility.Hidden;
+					lbHeight.Visibility = Visibility.Hidden;
+					lbWidth.Visibility = Visibility.Hidden;
 					DrawControl.RemoveSelection();
 				}
 				else
 				{
 					tbHeight.Visibility = Visibility.Visible;
 					tbWidth.Visibility = Visibility.Visible;
+					lbHeight.Visibility = Visibility.Visible;
+					lbWidth.Visibility = Visibility.Visible;
 					(int width, int height) = DrawControl.GetFigureSizes();
 					tbWidth.Text = width.ToString();
 					tbHeight.Text = height.ToString();
@@ -174,6 +178,7 @@ namespace Lab4
 		private void btnClear_Click(object sender, RoutedEventArgs e)
 		{
 			DrawControl.ClearPaintField(cnvPaint);
+			_isSelected = false;
 		}
 
 		private void slWidth_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

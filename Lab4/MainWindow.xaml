@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:local="clr-namespace:Lab4"
-        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="Lab4.MainWindow"
+        xmlns:local="clr-namespace:GraphicEditor"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="GraphicEditor.MainWindow"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="OOP" Height="450" Width="1000">
     <Grid>
@@ -26,7 +26,9 @@
                 <Button x:Name="btnSaveField" Content="Save field" HorizontalAlignment="Left" Margin="681,6,0,0" VerticalAlignment="Top" Height="24" Width="100" Click="btnSaveField_Click"/>
                 <Button x:Name="btnOpenField" Content="Open field" HorizontalAlignment="Left" Margin="681,35,0,0" VerticalAlignment="Top" Height="24" Width="100" Click="btnOpenField_Click"/>
                 <TextBox x:Name="tbWidth" materialDesign:HintAssist.Hint="Width" FontSize="13" VerticalAlignment="Top" Height="24" Margin="803,6,120,0" Visibility="Hidden" TextChanged="tbWidth_TextChanged"/>
+                <Label x:Name="lbWidth" Margin="861,6,-16,40" Visibility="Hidden">Width</Label>
                 <TextBox x:Name="tbHeight" materialDesign:HintAssist.Hint="Height" FontSize="13" VerticalAlignment="Top" Height="24" Margin="803,36,120,0" Visibility="Hidden" TextChanged="tbWidth_TextChanged"/>
+                <Label x:Name="lbHeight" Margin="861,35,-16,11" Visibility="Hidden">Height</Label>
             </Grid>
         </materialDesign:Card>
         <Canvas x:Name="cnvPaint" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" MouseLeftButtonDown="cnvPaint_MouseLeftButtonDown" MouseMove="cnvPaint_MouseMove"/>
